@@ -12,11 +12,50 @@ html {
 .header{
 	min-height: 30vh; /*enables one full image on webpage*/
 	width: 100%;
-	background-image: linear-gradient(rgba(6, 30, 4, 0.4), rgba(6, 30, 4, 0.7)), url("img/banner.png");
+	background-image: linear-gradient(rgba(6, 30, 4, 0.4), rgba(6, 30, 4, 0.47)), url("img/banner.png");
+	/*background-image: linear-gradient(rgba(6, 30, 4, 0.4), rgba(6, 30, 4, 0.7)), url("img/eleBikes.jpg");
+	background-image: linear-gradient(rgba(6, 30, 4, 0.4), rgba(6, 30, 4, 0.7)), url("img/eleBikes2.jpg");*/
 	background-position: center;
 	background-size: cover;
 	position: relative;
 }
+
+/* Customization of login button */
+body{
+	background-color: rgba(147, 183, 255, 0.24);
+}
+
+.btn-login{
+	padding-left: 25px;
+}
+
+button {
+	background-color: #04AA6D;
+	color: white;
+	padding: 10px 15px;
+	margin: 1px 0;
+	border: none;
+	cursor: pointer;
+	width: 20%;
+}
+
+button:hover {
+	opacity: 0.8;
+}
+
+input[type=text], input[type=password], input[type=email] {
+	width: 25%;
+	padding: 12px 20px;
+	margin: 8px 0;
+	display: inline-block;
+	border: 1px solid #ccc;
+	box-sizing: border-box;
+}
+
+input[type=email]{
+	margin-right: -25px;
+}
+
 
 
 nav{
@@ -223,6 +262,7 @@ nav .fa{
 	margin-top: 5%;
 	display: flex;
 	justify-content: space-between;
+
 }
 
 .course-col{
@@ -340,7 +380,7 @@ h3{
 .layer h3{
 	width: 100%;
 	font-weight: 500;
-	color: #85ff00;;
+	color: #85ff00;
 	font-size: 0px;
 	bottom: 0;
 	left: 50%;
@@ -367,11 +407,29 @@ h3{
 
 /* Bicicleta eletrica descrição */
 
-
 .row-bike{
 	margin-top: 5%;
 	display: flex;
 	justify-content: center;
+}
+
+.facilities-col-bike{
+display: inline-flex;
+}
+
+
+
+.info-bike{
+	padding-top: 15px;
+	padding-left: 25px;
+}
+
+.info-bike h1{
+	font-size: 20px;
+}
+
+#bikeh{
+	font-size: 25px;
 }
 
 .facilities-col{
@@ -383,8 +441,10 @@ h3{
 
 /* Image format dimension */
 .facilities-col img{
+	width: 90px;/* -> */
+	height: 150px; /* ^ */
 	width: 100%;
-	border-radius: 10px;
+	border-radius: 5px;
 }
 
 .facilities-col p{
@@ -394,33 +454,11 @@ h3{
 .facilities-col h3{
 	margin-top: 16px;
 	margin-bottom: 15px;
-	text-align: left;
+	/*display:flex;*/
+	text-align: center;
 }
 
-/* ---- */
 
-.facilities-col{
-	flex-basis: 31%; /* Image  */
-	border-radius: 10px;
-	margin-bottom: 5%;
-	text-align: left;
-}
-
-/* Image format dimension */
-.facilities-col img{
-	width: 100%;
-	border-radius: 10px;
-}
-
-.facilities-col p{
-	padding: 0;
-}
-
-.facilities-col h3{
-	margin-top: 16px;
-	margin-bottom: 15px;
-	text-align: left;
-}
 
 /*Testimonials -------------------------------------------------------------------------------------------------------*/
 .testimonials{
@@ -437,7 +475,6 @@ h3{
 	text-align: left;
 	background: #dbffd9; /* Background color */
 	padding: 25px; /*box size */
-	cursor: pointer;
 	display: flex;
 }
 
@@ -455,6 +492,12 @@ h3{
 .testimonial-col h3{
 	margin-top: 16px;
 	text-align: left;
+}
+
+.prices{
+	text-align: justify;
+	text-align-last: center;
+	margin: auto;
 }
 /*
 @media(max-width: 700px){
@@ -505,9 +548,8 @@ h3{
 }
 
 .icons .fa{
-	color: #604ff5;
+	/*color: #1c00ff;*/
 	margin: 0 13px;
-	cursor: pointer;
 	padding: 18px 0;
 }
 
