@@ -1,6 +1,6 @@
 <?php
 session_start();
-if(!empty($_SESSION)) {
+if((isset($_SESSION['username']) || !empty($_SESSION['username']))) {
     if(empty($_POST)) {
         echo '
         <!DOCTYPE html>
@@ -27,8 +27,8 @@ if(!empty($_SESSION)) {
                     <i class="fa fa-window-close"></i>
                     <ul>
                         <!-- <li> <a href="#">HOME</a></li> -->
-                        <li> <a href="index.html">LOGOUT</a></li>
-                        <li> <a href="">AJUDA</a></li>
+                        <li> <a href="menuprincipal.php">PÁGINA PRINCIPAL</a></li>
+                        <li> <a href="ajuda.php">AJUDA</a></li>
                     </ul>
                 </div>
                 <i class="fa fa-ellipsis-v" onclick="showMenu()"></i>

@@ -38,14 +38,15 @@ if((isset($_SESSION['username']) || !empty($_SESSION['username']))) {
             <section class="course" id="course">
                 <div class="input-box" >
                 
-                <h2>Listar Reservas</h2>
+                <h2>Alterar Reserva</h2>
                 <br><br>';
-
+    //Variaveis e a sua definição
     $servername = "localhost";
     $username = "root";
     $password = "";
     $db = "er_db";
-    $conn = mysqli_connect($servername, $username, $password, $db);
+    $conn = mysqli_connect($servername, $username, $password, $db); //Ligação à base de dados pelo mysql em que tem as variáveis de cima
+    //Se n ocorrer a conexão à base de dados, retorna uma mensagem de Erro
     if (!$conn) {
         die("Connection failed: " . mysqli_connect_error());
     }
@@ -62,7 +63,8 @@ if((isset($_SESSION['username']) || !empty($_SESSION['username']))) {
         echo '<p>Não tem registo de reservas pendentes</p>';
     }else{
         //Criar tabela
-        echo '<table>
+        echo '<form method="POST" action="pagamento.php" name="cancelform">
+              <table>
               <thead>
                 <tr>
                   <th>ID</th> 
@@ -70,6 +72,7 @@ if((isset($_SESSION['username']) || !empty($_SESSION['username']))) {
                   <th>Localidade</th>
                   <th>Data Início</th>
                   <th>Data Final</th>
+                  <th>Ação</th>
                 </tr>
               <thead>
               <tbody>';
@@ -83,6 +86,8 @@ if((isset($_SESSION['username']) || !empty($_SESSION['username']))) {
             echo'<td>' . $local[0] . '</td>'; //localidade
             echo'<td>' . $resultReserve[1] . '</td>';
             echo'<td>' . $resultReserve[2] . '</td>';
+            echo'<td style="text-align: center">
+                 </td>';
             echo'</tr>';
         }
         echo '</tbody>';
@@ -90,6 +95,7 @@ if((isset($_SESSION['username']) || !empty($_SESSION['username']))) {
     }
     echo '</div>
             </section>
+            <br><br>
             
             <!--Footer -->
             <section class="footer">
@@ -121,3 +127,4 @@ else{
 
 
 ?>
+

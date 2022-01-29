@@ -25,7 +25,7 @@ if(empty($_REQUEST)){
                 <ul>
                     <!-- <li> <a href="#">HOME</a></li> -->
                     <li> <a href="index.html">INÍCIO</a></li>
-                    <li> <a href="">AJUDA</a></li>
+                    <li> <a href="ajuda.php">AJUDA</a></li>
                 </ul>
             </div>
             <i class="fa fa-ellipsis-v" onclick="showMenu()"></i>
@@ -49,7 +49,7 @@ if(empty($_REQUEST)){
                     <br><br>
                     
                     <label><b>Confirmar Password: </b></label>
-                    <input type="password" placeholder="Confirm Password" id="confirmpassword" name="confirmpassword" maxlength="16" onchange="check_pass();" required>
+                    <input type="password" placeholder="Confirm Password" id="confirmpassword" name="confirmpassword" maxlength="16" required>
                     <br><br>
     
                     <label><b>Email:     </b></label>
@@ -57,15 +57,16 @@ if(empty($_REQUEST)){
                     <br><br>
     
                     <div class="btn-login">
-                        <button id="submit" type="submit" >Register</button>
+                        <button id="submit" type="submit" onclick="return Validate()">Register</button>
                         <script>
-                        function check_pass() {
-                            if (document.getElementById("password").value ==
-                                    document.getElementById("confirmpassword").value) {
-                                confirm.setCustomValidity();
-                            } else {
-                                confirm.setCustomValidity("Passwords do not match");
+                        function Validate() {
+                            var password = document.getElementById("password").value;
+                            var confirmPassword = document.getElementById("confirmpassword").value;
+                            if (password != confirmPassword) {
+                                alert("Passwords do not match.");
+                                return false;
                             }
+                            return true;
                         }
                         </script>
                     </div>
@@ -88,7 +89,7 @@ if(empty($_REQUEST)){
             <i class="fa fa-instagram"></i>
             <!--<i class="fa fa-linkedin"></i>-->
         </div>
-        <p>Made by Grupo 1 de ER</p>
+        <p>Feito por Grupo 1 de Engenharia de Requisitos (2021/2022)</p>
     </section>
     
     </body>
@@ -105,7 +106,7 @@ if(empty($_REQUEST)){
             die("Connection failed: " . mysqli_connect_error());
         }
 
-        $queryStringUnique = 'SELECT id, name FROM user WHERE name ="'.$_POST['username'].'"';
+        $queryStringUnique = 'SELECT id, username FROM user WHERE username ="'.$_POST['username'].'"';
         $queryResult = mysqli_query($conn, $queryStringUnique);
         if(mysqli_num_rows($queryResult) == 0) {
             //Ligação a base de dados;

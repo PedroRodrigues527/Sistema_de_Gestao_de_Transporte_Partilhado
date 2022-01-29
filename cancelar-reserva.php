@@ -38,7 +38,7 @@ if((isset($_SESSION['username']) || !empty($_SESSION['username']))) {
             <section class="course" id="course">
                 <div class="input-box" >
                 
-                <h2>Listar Reservas</h2>
+                <h2>Cancelar Reservas</h2>
                 <br><br>';
 
     $servername = "localhost";
@@ -62,7 +62,8 @@ if((isset($_SESSION['username']) || !empty($_SESSION['username']))) {
         echo '<p>Não tem registo de reservas pendentes</p>';
     }else{
         //Criar tabela
-        echo '<table>
+        echo '<form method="POST" action="pagamento.php" name="cancelform">
+              <table>
               <thead>
                 <tr>
                   <th>ID</th> 
@@ -70,6 +71,7 @@ if((isset($_SESSION['username']) || !empty($_SESSION['username']))) {
                   <th>Localidade</th>
                   <th>Data Início</th>
                   <th>Data Final</th>
+                  <th>Ação</th>
                 </tr>
               <thead>
               <tbody>';
@@ -83,6 +85,11 @@ if((isset($_SESSION['username']) || !empty($_SESSION['username']))) {
             echo'<td>' . $local[0] . '</td>'; //localidade
             echo'<td>' . $resultReserve[1] . '</td>';
             echo'<td>' . $resultReserve[2] . '</td>';
+            echo'<td style="text-align: center">
+                 <form method="POST" action="pagamento.php">
+                 <input type="hidden" name="reservaid" value="'.$resultReserve[0].'"/>
+                 <input type="hidden" name="paginaanterior" value="Cancelamento da Reserva"/>
+                 <button type="submit" style="padding-right: 55px; padding-left: 5px;">Cancelar</button></form></td>';
             echo'</tr>';
         }
         echo '</tbody>';
@@ -90,6 +97,8 @@ if((isset($_SESSION['username']) || !empty($_SESSION['username']))) {
     }
     echo '</div>
             </section>
+            <br><br>
+            <p style="text-align: center">Aviso: O cancelamento de uma reserva que possui menos de 24 horas para ser utilizada, implica uma taxa de valor de 5€</p>
             
             <!--Footer -->
             <section class="footer">

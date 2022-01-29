@@ -1,6 +1,6 @@
 <?php
 session_start();
-if(!empty($_SESSION)) {
+if((isset($_SESSION['username']) || !empty($_SESSION['username']))) {
     //CONTINUAR AQUI
     echo '
     <!DOCTYPE html>
@@ -27,8 +27,8 @@ if(!empty($_SESSION)) {
                 <i class="fa fa-window-close"></i>
                 <ul>
                     <!-- <li> <a href="#">HOME</a></li> -->
-                    <li> <a href="index.html">LOGOUT</a></li>
-                    <li> <a href="">AJUDA</a></li>
+                    <li> <a href="remover_sessao.php">LOGOUT</a></li>
+                    <li> <a href="ajuda.php">AJUDA</a></li>
                 </ul>
             </div>
             <i class="fa fa-ellipsis-v" onclick="showMenu()"></i>
@@ -69,7 +69,7 @@ if(!empty($_SESSION)) {
                         <button type="submit">Listar Reserva</button>
                     </div>
                 </form>
-                <form action="modificar-reserva.php" method="post">
+                <form action="alterar-reserva.php" method="post">
                     <div class="btn-login">
                         <button type="submit">Modificar Reserva</button>
                     </div>

@@ -1,6 +1,6 @@
 <?php
 session_start();
-if(!isset($_SESSION['username']) || empty($_SESSION['username']) && (!isset($_POST['paginaanterior']) || empty($_POST['paginaanterior']))){
+if((!isset($_SESSION['username']) || empty($_SESSION['username'])) && (!isset($_POST['paginaanterior']) || empty($_POST['paginaanterior']))){
     echo '<script>window.location.replace("http://localhost/Engenharia_de_Requisitos/index.html)</script>';
 }
 else if(isset($_POST['preco'])){
@@ -26,22 +26,22 @@ else if(isset($_POST['preco'])){
         $rowCredit = mysqli_fetch_array($queryResult2);
         if ($rowCredit[6] < $_POST['preco']) {
             echo '<script>if(confirm("Saldo insuficiente!")){
-                    window.location.replace("http://localhost/Engenharia_de_Requisitos/pagamento.php");
-          }
-          else
-              {
-                  window.location.replace("http://localhost/Engenharia_de_Requisitos/pagamento.php");
-              }</script>';
+                        window.location.replace("http://localhost/Engenharia_de_Requisitos/menuprincipal.php");
+                      }
+                      else
+                          {
+                                window.location.replace("http://localhost/Engenharia_de_Requisitos/menuprincipal.php");
+                          }</script>';
         } else {
             $queryString = 'UPDATE credit_card SET saldo = saldo -"' . $_POST['preco'] . '" WHERE id = "' . $rowCredit[0] . '"';
             if (!mysqli_query($conn, $queryString)) {
                 echo '<script>if(confirm("Erro inesperado na ligação à base de dados!")){
-                            window.location.replace("http://localhost/Engenharia_de_Requisitos/pagamento.php");
-                  }
-                  else
-                      {
-                            window.location.replace("http://localhost/Engenharia_de_Requisitos/pagamento.php");
-              }</script>';
+                        window.location.replace("http://localhost/Engenharia_de_Requisitos/menuprincipal.php");
+                      }
+                      else
+                          {
+                                window.location.replace("http://localhost/Engenharia_de_Requisitos/menuprincipal.php");
+                          }</script>';
             } else {
                 if($_POST['paginaanterior'] == 'Subscrição Anual') {
                     $datasub = date("Y-m-d", strtotime("+1 year"));
@@ -62,6 +62,7 @@ else if(isset($_POST['preco'])){
                                         VALUES ("'.$_SESSION['timebeg'].'","'.date("Y-m-d H:i",$endDate).'","'.$iduser[0].'","'.$_SESSION['bikeid'].'")';
 
                     if(mysqli_query($conn,$queryStringReserva)) {
+                        unset($_SESSION['timebeg'], $_SESSION['duracao'], $_SESSION['bikeid']);
                         echo '<script>if(confirm("A reserva foi inserida com sucesso!")){
                         window.location.replace("http://localhost/Engenharia_de_Requisitos/menuprincipal.php");
                       }
@@ -74,29 +75,49 @@ else if(isset($_POST['preco'])){
                     else
                     {
                         echo '<script>if(confirm("Erro na inserção da reserva!")){
-                        window.location.replace("http://localhost/Engenharia_de_Requisitos/pagamento.php");
+                        window.location.replace("http://localhost/Engenharia_de_Requisitos/fazer-reserva.php");
                       }
                       else
                           {
-                                window.location.replace("http://localhost/Engenharia_de_Requisitos/pagamento.php");
+                                window.location.replace("http://localhost/Engenharia_de_Requisitos/fazer-reserva.php");
                           }</script>';
                     }
-
+                }
+                else if($_POST['paginaanterior'] == 'Cancelamento da Reserva') {
+                    $queryStringDelReserva = 'DELETE FROM reserve WHERE id = "'.$_SESSION['reservaid'].'"';
+                    if(mysqli_query($conn,$queryStringDelReserva)) {
+                        unset($_SESSION['reservaid']);
+                        echo '<script>if(confirm("A reserva foi cancelada com sucesso!")){
+                        window.location.replace("http://localhost/Engenharia_de_Requisitos/menuprincipal.php");
+                      }
+                      else
+                          {
+                                window.location.replace("http://localhost/Engenharia_de_Requisitos/menuprincipal.php");
+                          }</script>';
+                    }
+                    else
+                    {
+                        echo '<script>if(confirm("Erro no cancelamento da reserva!")){
+                        window.location.replace("http://localhost/Engenharia_de_Requisitos/cancelar-reserva.php");
+                      }
+                      else
+                          {
+                                window.location.replace("http://localhost/Engenharia_de_Requisitos/cancelar-reserva.php");
+                          }</script>';
+                    }
                 }
             }
         }
-
     } else {
-        echo '<script>
-                    if(confirm("Dados de cartão de crédito inseridos estão inválidos!")){
-                            window.location.replace("http://localhost/Engenharia_de_Requisitos/pagamento.php");
-                    }else{
-                            window.location.replace("http://localhost/Engenharia_de_Requisitos/pagamento.php");
-                    }</script>';
+        echo '<script>if(confirm("Dados de cartão de crédito inseridos estão inválidos!")){
+                        window.location.replace("http://localhost/Engenharia_de_Requisitos/menuprincipal.php");
+                      }
+                      else
+                          {
+                                window.location.replace("http://localhost/Engenharia_de_Requisitos/menuprincipal.php");
+                          }</script>';
     }
-
     mysqli_close($conn);//te
-
 }
 else{
     //Conectar BD
@@ -112,7 +133,7 @@ else{
             die("Connection failed: " . mysqli_connect_error());
         }
         $queryResult = mysqli_query($conn, $queryString);
-        mysqli_close($conn);
+
         //query para verificar sub anual
         if (mysqli_num_rows($queryResult) > 0) {
             $row = mysqli_fetch_array($queryResult);
@@ -121,7 +142,11 @@ else{
                 $acederPag = 1;
             } else {
                 //Tem sub
-                echo '<script>if(confirm("Ja possui subscrição anual!")){
+                $querySubData = 'SELECT data_pro FROM user WHERE username ="'. $_SESSION['username'] .'"';
+                $resultSubData = mysqli_query($conn, $querySubData);
+                $SubData = mysqli_fetch_array($resultSubData);
+
+                echo '<script>if(confirm("Ainda possui subscrição anual até '.$SubData[0].'")){
                         window.location.replace("http://localhost/Engenharia_de_Requisitos/menuprincipal.php");
               }
               else
@@ -130,6 +155,7 @@ else{
                   }</script>';
             }
         }
+        mysqli_close($conn);
     }
     else if ($_POST['paginaanterior'] == 'Nova Reserva'){
         //Reserva - pagamento
@@ -153,9 +179,9 @@ else{
                 //INSERIR RESERVA
                 $queryIdUser = mysqli_query($conn,'SELECT id FROM user WHERE username = "'.$_SESSION['username'].'"');
                 $UserID = mysqli_fetch_array($queryIdUser);
-                $endDate = strtotime($_SESSION['duracao'],strtotime($_SESSION['timebeg']));
+                $endDate = strtotime($_POST['duracao'],strtotime($_POST['timebeg']));
                 $queryStringReserva = 'INSERT INTO reserve (inicial_date, end_date, user_id, bicycle_id) 
-                                        VALUES ("'.$_SESSION['timebeg'].'","'.date("Y-m-d H:i",$endDate).'","'.$UserID[0].'","'.$_SESSION['bikeid'].'")';
+                                        VALUES ("'.$_POST['timebeg'].'","'.date("Y-m-d H:i",$endDate).'","'.$UserID[0].'","'.$_POST['bikeid'].'")';
                 if(mysqli_query($conn,$queryStringReserva)) {
                     echo '<script>if(confirm("Ja possui subscrição anual, logo a reserva foi inserida com sucesso!")){
                         window.location.replace("http://localhost/Engenharia_de_Requisitos/menuprincipal.php");
@@ -179,8 +205,55 @@ else{
         }
         mysqli_close($conn);
     }
-    else if(false){ //Cancelamento reservar
+    else if($_POST['paginaanterior'] == "Cancelamento da Reserva"){ //Cancelamento reservar
         //Verificar se paga taxa
+        $servername = "localhost";
+        $username = "root";
+        $password = "";
+        $db = "er_db";
+        $conn = mysqli_connect($servername, $username, $password, $db);
+        if (!$conn) {
+            die("Connection failed: " . mysqli_connect_error());
+        }
+        $queryStringDataReserva = mysqli_query($conn,'SELECT * FROM reserve WHERE id = "'.$_POST['reservaid'].'"');
+        $rowReserva = mysqli_fetch_array($queryStringDataReserva);
+
+        $date1=date_create(date("Y-m-d H:i:s"));
+        $date2=date_create($rowReserva[1]);
+
+        $interval = date_diff($date1, $date2);
+        //$interval->format('%a days');
+        if($interval->format('%a days') == '1 days' || $interval->format('%a days') == '0 days')
+        {
+            //pagar taxa extra 5 euros
+            $acederPag = 3;
+        }
+        else
+        {
+            //cancelar a reserva
+            $queryStringDelReserva = 'DELETE FROM reserve WHERE id = "'.$_POST['reservaid'].'"';
+            if(mysqli_query($conn,$queryStringDelReserva)) {
+                echo '<script>if(confirm("A reserva foi cancelada com sucesso!")){
+                        window.location.replace("http://localhost/Engenharia_de_Requisitos/menuprincipal.php");
+                      }
+                      else
+                          {
+                                window.location.replace("http://localhost/Engenharia_de_Requisitos/menuprincipal.php");
+                          }</script>';
+            }
+            else
+            {
+                echo '<script>if(confirm("Erro no cancelamento da reserva!")){
+                        window.location.replace("http://localhost/Engenharia_de_Requisitos/cancelar-reserva.php");
+                      }
+                      else
+                          {
+                                window.location.replace("http://localhost/Engenharia_de_Requisitos/cancelar-reserva.php");
+                          }</script>';
+            }
+        }
+
+        mysqli_close($conn);
     }
     else if(false){ //Modificação reservar
         //Verificar se paga taxa
@@ -204,6 +277,11 @@ else{
             } else if ($_POST['duracao'] == '+4 hours') {
                 $preco = 39.99;
             }
+        }
+        else if($acederPag == 3)
+        {
+            $preco=5.00;
+            $_SESSION['reservaid'] = $_POST['reservaid'];
         }
         echo'<!DOCTYPE html>
             <html>
@@ -230,7 +308,7 @@ else{
                         <ul>
                             <!-- <li> <a href="#">HOME</a></li> -->
                             <li> <a href="menuprincipal.php">PÁGINA PRINCIPAL</a></li>
-                            <li> <a href="">AJUDA</a></li>
+                            <li> <a href="ajuda.php">AJUDA</a></li>
                         </ul>
                     </div>
                     <i class="fa fa-ellipsis-v" onclick="showMenu()"></i>
@@ -247,21 +325,23 @@ else{
                     <br>
             
                     <form action="" method="post">
-                        <label><b>Número do cartão: </b></label>
-                        <input type="number" placeholder="Número cartão" name="card_num" required>
-                        <br> <br>
-            
-                        <label><b>Validade: </b></label>
-                        <input id="month" type="month" name="validade" required>
-                        <br> <br>
-            
-                        <label><b>PIN: </b></label>
-                        <input type="password" inputmode="numeric" minlength="4" maxlength="4" placeholder="PIN" name="pin" required>
-                        <br><br>
+                        <div class="input-form">
+                            <label><b>Número do cartão: </b></label>
+                            <input type="text" inputmode="numeric" placeholder="Número cartão crédito" name="card_num" maxlength="16" required>
+                            <br> <br>
+                
+                            <label><b>PIN: </b></label>
+                            <input type="password" inputmode="numeric" minlength="4" maxlength="4" placeholder="PIN" name="pin" required>
+                            <br><br>
+                            
+                            <label><b>Validade: </b></label>
+                            <input id="month" type="month" name="validade" style="width: 25%;" required>
+                            <br> <br>
+                        </div>
             
                         <input type="hidden" value="'.$preco .'" name="preco">
                         <input type="hidden" value="'.$_POST['paginaanterior'].'" name="paginaanterior">
-            
+                
                         <div class="btn-login">
                             <button type="submit">Pagar</button>
                         </div>
